@@ -21,14 +21,14 @@ export default function MeetingSuggestions({
   if (suggestions.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
-        추천 시간이 없습니다. 가능 시간을 추가하고 날짜 범위를 설정하면 추천 시간을 볼 수 있습니다.
+        우리 못 만나.... 되는 시간 추가하고 날짜 범위를 설정해주세요!
       </div>
     );
   }
 
   const getUserName = (userId: string) => {
     const user = users.find(u => u.id === userId);
-    return user?.name || '알 수 없음';
+    return user?.name || '당신은 누구인가';
   };
 
   const formatTimeRange = (start: Date, end: Date, timezone: string) => {
@@ -54,7 +54,7 @@ export default function MeetingSuggestions({
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold text-gray-900">
-        추천 회의 시간 ({suggestions.length}개)
+        두둥! 우리는 언제 만날 수 있냐면... ({suggestions.length}개)
       </h3>
 
       <div className="space-y-3">
@@ -89,7 +89,7 @@ export default function MeetingSuggestions({
 
               <div className="mt-3 pt-3 border-t border-gray-200">
                 <div className="text-xs font-medium text-gray-500 mb-2">
-                  참가자별 현지 시간:
+                  각자 현지 시간:
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {suggestion.availableUsers.map(userId => (
@@ -109,7 +109,7 @@ export default function MeetingSuggestions({
                   }}
                   className="mt-3 w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-colors text-sm"
                 >
-                  이 시간 선택
+                  요때 만나자!!!!
                 </button>
               )}
             </div>

@@ -16,14 +16,14 @@ export default function AvailabilityList({
   if (availabilities.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
-        아직 추가된 가능 시간이 없습니다
+        아직 추가된 시간이 없습니다... ㅠㅠ)
       </div>
     );
   }
 
   const getUserName = (userId: string) => {
     const user = users.find(u => u.id === userId);
-    return user?.name || '알 수 없는 사용자';
+    return user?.name || '당신은 누구인가';
   };
 
   const formatDate = (dateString: string) => {

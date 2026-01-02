@@ -18,12 +18,12 @@ export default function AvailabilityInput({ userId, onAdd }: AvailabilityInputPr
 
     // Validate
     if (!date) {
-      alert('날짜를 선택해주세요');
+      alert('어허이 날짜를 선택해주세요!');
       return;
     }
 
     if (startTime >= endTime) {
-      alert('시작 시간은 종료 시간보다 빨라야 합니다');
+      alert('어허이 시작 시간은 종료 시간보다 빨라야 하지요?');
       return;
     }
 
@@ -89,7 +89,7 @@ export default function AvailabilityInput({ userId, onAdd }: AvailabilityInputPr
         type="submit"
         className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-colors"
       >
-        가능 시간 추가
+        가능한 시간 추가
       </button>
     </form>
   );

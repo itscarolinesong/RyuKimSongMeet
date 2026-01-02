@@ -27,7 +27,7 @@ export default function UserManager({
     e.preventDefault();
 
     if (!name.trim()) {
-      alert('이름을 입력해주세요');
+      alert('후 아유??');
       return;
     }
 
@@ -58,7 +58,7 @@ export default function UserManager({
         <form onSubmit={handleSubmit} className="space-y-3 p-4 bg-gray-50 rounded-lg">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-900 mb-1">
-              이름
+              네임 플리즈
             </label>
             <input
               type="text"
@@ -101,7 +101,7 @@ export default function UserManager({
       <div className="space-y-2">
         {users.length === 0 ? (
           <div className="text-center py-6 text-gray-500">
-            아직 참가자가 없습니다. 추가해주세요!
+            당신이 처음이군요... 참가자를 추가해주세요!
           </div>
         ) : (
           users.map(user => (
