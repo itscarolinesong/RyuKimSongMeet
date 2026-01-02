@@ -1,38 +1,6 @@
 import { NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { kv } from '@vercel/kv';
 import { Meeting } from '@/lib/types';
-
-const DATA_DIR = path.join(process.cwd(), 'data');
-const MEETINGS_FILE = path.join(DATA_DIR, 'meetings.json');
-
-// Ensure data directory and file exist
-async function ensureDataFile() {
-  try {
-    await fs.access(DATA_DIR);
-  } catch {
-    await fs.mkdir(DATA_DIR, { recursive: true });
-  }
-
-  try {
-    await fs.access(MEETINGS_FILE);
-  } catch {
-    await fs.writeFile(MEETINGS_FILE, JSON.stringify({}), 'utf-8');
-  }
-}
-
-// Read all meetings
-async function readMeetings(): Promise<Record<string, Meeting>> {
-  await ensureDataFile();
-  const data = await fs.readFile(MEETINGS_FILE, 'utf-8');
-  return JSON.parse(data);
-}
-
-// Write all meetings
-async function writeMeetings(meetings: Record<string, Meeting>) {
-  await ensureDataFile();
-  await fs.writeFile(MEETINGS_FILE, JSON.stringify(meetings, null, 2), 'utf-8');
-}
 
 // Generate unique meeting ID
 function generateMeetingId(): string {
@@ -55,9 +23,8 @@ export async function POST(request: Request) {
       availabilities: []
     };
 
-    const meetings = await readMeetings();
-    meetings[meetingId] = meeting;
-    await writeMeetings(meetings);
+    // Store in Vercel KV
+    await kv.set(`meeting:${meetingId}`, JSON.stringify(meeting));
 
     return NextResponse.json({ meeting, meetingId });
   } catch (error) {
@@ -69,7 +36,21 @@ export async function POST(request: Request) {
 // GET: Get all meetings (for admin purposes)
 export async function GET() {
   try {
-    const meetings = await readMeetings();
+    // Get all meeting keys
+    const keys = await kv.keys('meeting:*');
+    const meetings: Record<string, Meeting> = {};
+
+    // Fetch all meetings
+    for (const key of keys) {
+      const meetingData = await kv.get(key);
+      if (meetingData) {
+        const meeting = typeof meetingData === 'string'
+          ? JSON.parse(meetingData)
+          : meetingData as Meeting;
+        meetings[meeting.id] = meeting;
+      }
+    }
+
     return NextResponse.json({ meetings });
   } catch (error) {
     console.error('Error reading meetings:', error);

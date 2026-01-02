@@ -1,38 +1,6 @@
 import { NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { kv } from '@vercel/kv';
 import { Meeting } from '@/lib/types';
-
-const DATA_DIR = path.join(process.cwd(), 'data');
-const MEETINGS_FILE = path.join(DATA_DIR, 'meetings.json');
-
-// Ensure data directory and file exist
-async function ensureDataFile() {
-  try {
-    await fs.access(DATA_DIR);
-  } catch {
-    await fs.mkdir(DATA_DIR, { recursive: true });
-  }
-
-  try {
-    await fs.access(MEETINGS_FILE);
-  } catch {
-    await fs.writeFile(MEETINGS_FILE, JSON.stringify({}), 'utf-8');
-  }
-}
-
-// Read all meetings
-async function readMeetings(): Promise<Record<string, Meeting>> {
-  await ensureDataFile();
-  const data = await fs.readFile(MEETINGS_FILE, 'utf-8');
-  return JSON.parse(data);
-}
-
-// Write all meetings
-async function writeMeetings(meetings: Record<string, Meeting>) {
-  await ensureDataFile();
-  await fs.writeFile(MEETINGS_FILE, JSON.stringify(meetings, null, 2), 'utf-8');
-}
 
 // GET: Get specific meeting
 export async function GET(
@@ -41,12 +9,15 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const meetings = await readMeetings();
-    const meeting = meetings[id];
+    const meetingData = await kv.get(`meeting:${id}`);
 
-    if (!meeting) {
+    if (!meetingData) {
       return NextResponse.json({ error: 'Meeting not found' }, { status: 404 });
     }
+
+    const meeting = typeof meetingData === 'string'
+      ? JSON.parse(meetingData)
+      : meetingData as Meeting;
 
     return NextResponse.json({ meeting });
   } catch (error) {
@@ -63,22 +34,27 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const meetings = await readMeetings();
 
-    if (!meetings[id]) {
+    const meetingData = await kv.get(`meeting:${id}`);
+
+    if (!meetingData) {
       return NextResponse.json({ error: 'Meeting not found' }, { status: 404 });
     }
 
+    const existingMeeting = typeof meetingData === 'string'
+      ? JSON.parse(meetingData)
+      : meetingData as Meeting;
+
     // Update meeting
-    meetings[id] = {
-      ...meetings[id],
+    const updatedMeeting = {
+      ...existingMeeting,
       ...body,
       id // Ensure ID doesn't change
     };
 
-    await writeMeetings(meetings);
+    await kv.set(`meeting:${id}`, JSON.stringify(updatedMeeting));
 
-    return NextResponse.json({ meeting: meetings[id] });
+    return NextResponse.json({ meeting: updatedMeeting });
   } catch (error) {
     console.error('Error updating meeting:', error);
     return NextResponse.json({ error: 'Failed to update meeting' }, { status: 500 });
@@ -92,14 +68,13 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const meetings = await readMeetings();
+    const meetingData = await kv.get(`meeting:${id}`);
 
-    if (!meetings[id]) {
+    if (!meetingData) {
       return NextResponse.json({ error: 'Meeting not found' }, { status: 404 });
     }
 
-    delete meetings[id];
-    await writeMeetings(meetings);
+    await kv.del(`meeting:${id}`);
 
     return NextResponse.json({ success: true });
   } catch (error) {
