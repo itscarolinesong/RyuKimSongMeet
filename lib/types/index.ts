@@ -6,7 +6,7 @@ export interface User {
 
 export interface AvailabilityBlock {
   userId: string;
-  dayOfWeek: number; // 0 (Sunday) - 6 (Saturday)
+  date: string; // "YYYY-MM-DD" format, specific date
   startTimeLocal: string; // "HH:mm" format, e.g., "19:00"
   endTimeLocal: string; // "HH:mm" format, e.g., "22:00"
 }

@@ -45,55 +45,56 @@ export function convertUTCToLocal(utcDate: Date, timezone: string): DateTime {
 }
 
 /**
- * Converts an availability block to UTC time slots for a given date range
- * @param block - Availability block with local times
+ * Converts an availability block to UTC time slot
+ * @param block - Availability block with local times and specific date
  * @param timezone - User's timezone
- * @param startDate - Start of date range to generate slots
- * @param endDate - End of date range to generate slots
- * @returns Array of time slots in UTC
+ * @returns TimeSlot in UTC
  */
 export function availabilityBlockToUTCSlots(
   block: AvailabilityBlock,
   timezone: string,
-  startDate: Date,
-  endDate: Date
+  startDate?: Date,
+  endDate?: Date
 ): TimeSlot[] {
   const slots: TimeSlot[] = [];
-  const start = DateTime.fromJSDate(startDate, { zone: timezone });
-  const end = DateTime.fromJSDate(endDate, { zone: timezone });
 
-  let current = start.startOf('day');
+  // Parse the date from the block
+  const [year, month, day] = block.date.split('-').map(Number);
+  const [startHour, startMinute] = block.startTimeLocal.split(':').map(Number);
+  const [endHour, endMinute] = block.endTimeLocal.split(':').map(Number);
 
-  while (current <= end) {
-    const currentDayOfWeek = current.weekday === 7 ? 0 : current.weekday;
+  // Create DateTime in user's local timezone
+  const slotStart = DateTime.fromObject(
+    {
+      year,
+      month,
+      day,
+      hour: startHour,
+      minute: startMinute,
+      second: 0,
+      millisecond: 0
+    },
+    { zone: timezone }
+  ).toUTC();
 
-    if (currentDayOfWeek === block.dayOfWeek) {
-      const [startHour, startMinute] = block.startTimeLocal.split(':').map(Number);
-      const [endHour, endMinute] = block.endTimeLocal.split(':').map(Number);
+  const slotEnd = DateTime.fromObject(
+    {
+      year,
+      month,
+      day,
+      hour: endHour,
+      minute: endMinute,
+      second: 0,
+      millisecond: 0
+    },
+    { zone: timezone }
+  ).toUTC();
 
-      const slotStart = current.set({
-        hour: startHour,
-        minute: startMinute,
-        second: 0,
-        millisecond: 0
-      }).toUTC();
-
-      const slotEnd = current.set({
-        hour: endHour,
-        minute: endMinute,
-        second: 0,
-        millisecond: 0
-      }).toUTC();
-
-      slots.push({
-        start: slotStart.toJSDate(),
-        end: slotEnd.toJSDate(),
-        userId: block.userId
-      });
-    }
-
-    current = current.plus({ days: 1 });
-  }
+  slots.push({
+    start: slotStart.toJSDate(),
+    end: slotEnd.toJSDate(),
+    userId: block.userId
+  });
 
   return slots;
 }
@@ -142,24 +143,24 @@ export function isReasonableHour(
 }
 
 /**
- * Get a list of common timezones with labels
+ * Get a list of common timezones with labels in Korean
  */
 export const COMMON_TIMEZONES = [
-  { value: 'America/New_York', label: 'Eastern Time (US)' },
-  { value: 'America/Chicago', label: 'Central Time (US)' },
-  { value: 'America/Denver', label: 'Mountain Time (US)' },
-  { value: 'America/Los_Angeles', label: 'Pacific Time (US)' },
-  { value: 'America/Anchorage', label: 'Alaska Time' },
-  { value: 'Pacific/Honolulu', label: 'Hawaii Time' },
-  { value: 'Europe/London', label: 'London (GMT/BST)' },
-  { value: 'Europe/Paris', label: 'Paris (CET/CEST)' },
-  { value: 'Europe/Berlin', label: 'Berlin (CET/CEST)' },
-  { value: 'Asia/Seoul', label: 'Seoul (KST)' },
-  { value: 'Asia/Tokyo', label: 'Tokyo (JST)' },
-  { value: 'Asia/Shanghai', label: 'Shanghai (CST)' },
-  { value: 'Asia/Hong_Kong', label: 'Hong Kong (HKT)' },
-  { value: 'Asia/Singapore', label: 'Singapore (SGT)' },
-  { value: 'Asia/Dubai', label: 'Dubai (GST)' },
-  { value: 'Australia/Sydney', label: 'Sydney (AEDT/AEST)' },
-  { value: 'Pacific/Auckland', label: 'Auckland (NZDT/NZST)' },
+  { value: 'Asia/Seoul', label: '서울 (KST)' },
+  { value: 'America/New_York', label: '뉴욕 (동부 시간)' },
+  { value: 'America/Chicago', label: '시카고 (중부 시간)' },
+  { value: 'America/Denver', label: '덴버 (산악 시간)' },
+  { value: 'America/Los_Angeles', label: '로스앤젤레스 (태평양 시간)' },
+  { value: 'America/Anchorage', label: '앵커리지 (알래스카)' },
+  { value: 'Pacific/Honolulu', label: '호놀룰루 (하와이)' },
+  { value: 'Europe/London', label: '런던 (GMT/BST)' },
+  { value: 'Europe/Paris', label: '파리 (CET/CEST)' },
+  { value: 'Europe/Berlin', label: '베를린 (CET/CEST)' },
+  { value: 'Asia/Tokyo', label: '도쿄 (JST)' },
+  { value: 'Asia/Shanghai', label: '상하이 (CST)' },
+  { value: 'Asia/Hong_Kong', label: '홍콩 (HKT)' },
+  { value: 'Asia/Singapore', label: '싱가포르 (SGT)' },
+  { value: 'Asia/Dubai', label: '두바이 (GST)' },
+  { value: 'Australia/Sydney', label: '시드니 (AEDT/AEST)' },
+  { value: 'Pacific/Auckland', label: '오클랜드 (NZDT/NZST)' },
 ];

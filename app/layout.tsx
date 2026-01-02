@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "RyuKimSongMeet - Timezone-Aware Meeting Scheduler",
-  description: "Easy scheduling tool for friend groups across different time zones. Find optimal meeting times with automatic timezone conversion.",
+  title: "RyuKimSongMeet - 시간대 맞춤 일정 조율",
+  description: "다른 시간대에 있는 친구들과의 쉬운 일정 조율. 자동 시간대 변환으로 최적의 회의 시간을 찾아보세요.",
 };
 
 export default function RootLayout({

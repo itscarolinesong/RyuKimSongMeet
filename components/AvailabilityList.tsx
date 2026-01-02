@@ -8,8 +8,6 @@ interface AvailabilityListProps {
   onRemove: (index: number) => void;
 }
 
-const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
 export default function AvailabilityList({
   availabilities,
   users,
@@ -18,14 +16,23 @@ export default function AvailabilityList({
   if (availabilities.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
-        No availability blocks added yet
+        아직 추가된 가능 시간이 없습니다
       </div>
     );
   }
 
   const getUserName = (userId: string) => {
     const user = users.find(u => u.id === userId);
-    return user?.name || 'Unknown User';
+    return user?.name || '알 수 없는 사용자';
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString + 'T00:00:00');
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
+    return `${year}년 ${month}월 ${day}일 (${dayOfWeek})`;
   };
 
   return (
@@ -39,8 +46,11 @@ export default function AvailabilityList({
             <div className="font-medium text-gray-900">
               {getUserName(availability.userId)}
             </div>
+            <div className="text-sm text-gray-700 mt-1">
+              {formatDate(availability.date)}
+            </div>
             <div className="text-sm text-gray-600">
-              {DAYS[availability.dayOfWeek]} • {availability.startTimeLocal} - {availability.endTimeLocal}
+              {availability.startTimeLocal} - {availability.endTimeLocal}
             </div>
           </div>
 
@@ -48,7 +58,7 @@ export default function AvailabilityList({
             onClick={() => onRemove(index)}
             className="text-red-500 hover:text-red-700 font-medium px-3 py-1 rounded transition-colors"
           >
-            Remove
+            삭제
           </button>
         </div>
       ))}

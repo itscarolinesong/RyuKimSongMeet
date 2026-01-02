@@ -37,12 +37,12 @@ export default function CalendarExport({
         onClick={() => setShowOptions(!showOptions)}
         className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
       >
-        {showOptions ? 'Hide Calendar Options' : 'Add to Calendar'}
+        {showOptions ? '캘린더 옵션 숨기기' : '캘린더에 추가'}
       </button>
 
       {showOptions && (
         <div className="p-4 bg-gray-50 rounded-lg space-y-3">
-          <h4 className="font-semibold text-gray-900 mb-3">Choose your calendar:</h4>
+          <h4 className="font-semibold text-gray-900 mb-3">캘린더 선택:</h4>
 
           <button
             onClick={() => window.open(urls.google, '_blank')}
@@ -66,7 +66,7 @@ export default function CalendarExport({
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            Google Calendar
+            구글 캘린더
           </button>
 
           <button
@@ -78,7 +78,7 @@ export default function CalendarExport({
               <path fill="#0364B8" d="M13.125 6.75v10.875h-1.875V6.75h1.875z" />
               <path fill="#0078D4" d="M11.25 6.75v10.875H1.875A1.125 1.125 0 01.75 16.5V7.875c0-.621.504-1.125 1.125-1.125h9.375z" />
             </svg>
-            Outlook
+            아웃룩
           </button>
 
           <button
@@ -88,7 +88,7 @@ export default function CalendarExport({
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#5F01D1" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 17.8h-2.53l-3.06-7.514L9.247 17.8H6.717l4.127-9.608-.822-2.076h2.53l.822 2.076 4.52 9.608z" />
             </svg>
-            Yahoo Calendar
+            야후 캘린더
           </button>
 
           <div className="relative my-4">
@@ -96,7 +96,7 @@ export default function CalendarExport({
               <div className="w-full border-t border-gray-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-gray-50 text-gray-500">or</span>
+              <span className="px-2 bg-gray-50 text-gray-500">또는</span>
             </div>
           </div>
 
@@ -107,7 +107,7 @@ export default function CalendarExport({
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            Download .ics file (Apple Calendar, etc.)
+            .ics 파일 다운로드 (애플 캘린더 등)
           </button>
         </div>
       )}

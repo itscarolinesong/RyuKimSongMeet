@@ -88,10 +88,11 @@ export function validateAvailabilities(
   const errors: string[] = [];
 
   blocks.forEach((block, index) => {
-    // Validate day of week
-    if (block.dayOfWeek < 0 || block.dayOfWeek > 6) {
+    // Validate date format
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(block.date)) {
       errors.push(
-        `Block ${index}: dayOfWeek must be between 0 (Sunday) and 6 (Saturday)`
+        `Block ${index}: date must be in YYYY-MM-DD format`
       );
     }
 
@@ -136,24 +137,21 @@ export function getAvailabilitySummary(
 ): {
   totalBlocks: number;
   userCoverage: Map<string, number>;
-  dayCoverage: Map<number, number>;
+  dateCoverage: Map<string, number>;
 } {
   const userCoverage = new Map<string, number>();
-  const dayCoverage = new Map<number, number>();
+  const dateCoverage = new Map<string, number>();
 
   users.forEach(user => userCoverage.set(user.id, 0));
-  for (let i = 0; i < 7; i++) {
-    dayCoverage.set(i, 0);
-  }
 
   availabilities.forEach(block => {
     userCoverage.set(block.userId, (userCoverage.get(block.userId) || 0) + 1);
-    dayCoverage.set(block.dayOfWeek, (dayCoverage.get(block.dayOfWeek) || 0) + 1);
+    dateCoverage.set(block.date, (dateCoverage.get(block.date) || 0) + 1);
   });
 
   return {
     totalBlocks: availabilities.length,
     userCoverage,
-    dayCoverage
+    dateCoverage
   };
 }

@@ -54,7 +54,7 @@ interface MeetingState {
 }
 
 const initialState = {
-  meetingTitle: 'Friend Group Meeting',
+  meetingTitle: '친구 모임',
   meetingDescription: '',
   meetingDuration: 60,
   users: [],

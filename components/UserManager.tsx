@@ -27,7 +27,7 @@ export default function UserManager({
     e.preventDefault();
 
     if (!name.trim()) {
-      alert('Please enter a name');
+      alert('이름을 입력해주세요');
       return;
     }
 
@@ -45,41 +45,41 @@ export default function UserManager({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-900">Participants</h3>
+        <h3 className="text-lg font-semibold text-gray-900">참가자</h3>
         <button
           onClick={() => setShowForm(!showForm)}
           className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-colors text-sm"
         >
-          {showForm ? 'Cancel' : '+ Add Person'}
+          {showForm ? '취소' : '+ 사람 추가'}
         </button>
       </div>
 
       {showForm && (
         <form onSubmit={handleSubmit} className="space-y-3 p-4 bg-gray-50 rounded-lg">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-              Name
+            <label htmlFor="name" className="block text-sm font-medium text-gray-900 mb-1">
+              이름
             </label>
             <input
               type="text"
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Enter name"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="이름 입력"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white placeholder-gray-500"
               autoFocus
             />
           </div>
 
           <div>
-            <label htmlFor="timezone" className="block text-sm font-medium text-gray-700 mb-1">
-              Timezone
+            <label htmlFor="timezone" className="block text-sm font-medium text-gray-900 mb-1">
+              시간대
             </label>
             <select
               id="timezone"
               value={timezone}
               onChange={(e) => setTimezone(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
             >
               {COMMON_TIMEZONES.map(tz => (
                 <option key={tz.value} value={tz.value}>
@@ -93,7 +93,7 @@ export default function UserManager({
             type="submit"
             className="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md transition-colors"
           >
-            Add Participant
+            참가자 추가
           </button>
         </form>
       )}
@@ -101,7 +101,7 @@ export default function UserManager({
       <div className="space-y-2">
         {users.length === 0 ? (
           <div className="text-center py-6 text-gray-500">
-            No participants yet. Add some to get started!
+            아직 참가자가 없습니다. 추가해주세요!
           </div>
         ) : (
           users.map(user => (
@@ -129,13 +129,13 @@ export default function UserManager({
                       : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                   }`}
                 >
-                  {currentUser?.id === user.id ? 'Selected' : 'Select'}
+                  {currentUser?.id === user.id ? '선택됨' : '선택'}
                 </button>
                 <button
                   onClick={() => onRemoveUser(user.id)}
                   className="text-red-500 hover:text-red-700 px-3 py-1 rounded text-sm font-medium transition-colors"
                 >
-                  Remove
+                  삭제
                 </button>
               </div>
             </div>
