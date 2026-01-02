@@ -20,8 +20,8 @@ export default function MeetingSuggestions({
 }: MeetingSuggestionsProps) {
   if (suggestions.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500">
-        우리 못 만나.... 되는 시간 추가하고 날짜 범위를 설정해주세요!
+      <div className="text-center py-8 text-gray-700 text-lg font-medium">
+        충격... 우리 만날 수 있는 시간 없음...
       </div>
     );
   }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { use } from 'react';
 import { User, AvailabilityBlock, MeetingOption, Meeting } from '@/lib/types';
 import { findOptimalMeetingTimes } from '@/lib/utils/scheduler';
@@ -19,8 +19,10 @@ export default function MeetingPage({ params }: { params: Promise<{ id: string }
   const [error, setError] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [suggestions, setSuggestions] = useState<MeetingOption[]>([]);
+  const [showSuggestionsSection, setShowSuggestionsSection] = useState(false);
   const [selectedOption, setSelectedOption] = useState<MeetingOption | null>(null);
   const [viewerTimezone] = useState(detectUserTimezone());
+  const suggestionsRef = useRef<HTMLDivElement>(null);
 
   // New user form
   const [showAddUser, setShowAddUser] = useState(false);
@@ -126,6 +128,12 @@ export default function MeetingPage({ params }: { params: Promise<{ id: string }
     });
 
     setSuggestions(options);
+    setShowSuggestionsSection(true);
+
+    // Scroll to suggestions section after a brief delay to ensure DOM update
+    setTimeout(() => {
+      suggestionsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   };
 
   const copyShareLink = () => {
@@ -315,8 +323,8 @@ export default function MeetingPage({ params }: { params: Promise<{ id: string }
         )}
 
         {/* Suggestions */}
-        {suggestions.length > 0 && (
-          <div className="bg-white rounded-lg shadow-md p-6">
+        {showSuggestionsSection && (
+          <div ref={suggestionsRef} className="bg-white rounded-lg shadow-md p-6">
             <MeetingSuggestions
               suggestions={suggestions}
               users={meeting.users}
