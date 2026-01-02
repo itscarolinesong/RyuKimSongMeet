@@ -70,37 +70,6 @@ export default function CalendarExport({
           </button>
 
           <button
-            onClick={() => window.open(urls.outlook, '_blank')}
-            className="w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-md border border-gray-300 transition-colors"
-          >
-            <svg className="w-5 h-5" viewBox="0 0 24 24">
-              <path fill="#0078D4" d="M24 7.875V16.5c0 .621-.504 1.125-1.125 1.125h-9.75V6.75h9.75c.621 0 1.125.504 1.125 1.125z" />
-              <path fill="#0364B8" d="M13.125 6.75v10.875h-1.875V6.75h1.875z" />
-              <path fill="#0078D4" d="M11.25 6.75v10.875H1.875A1.125 1.125 0 01.75 16.5V7.875c0-.621.504-1.125 1.125-1.125h9.375z" />
-            </svg>
-            아웃룩
-          </button>
-
-          <button
-            onClick={() => window.open(urls.yahoo, '_blank')}
-            className="w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-md border border-gray-300 transition-colors"
-          >
-            <svg className="w-5 h-5" viewBox="0 0 24 24">
-              <path fill="#5F01D1" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 17.8h-2.53l-3.06-7.514L9.247 17.8H6.717l4.127-9.608-.822-2.076h2.53l.822 2.076 4.52 9.608z" />
-            </svg>
-            야후 캘린더
-          </button>
-
-          <div className="relative my-4">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-gray-50 text-gray-500">또는</span>
-            </div>
-          </div>
-
-          <button
             onClick={handleDownloadICS}
             className="w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-md border border-gray-300 transition-colors"
           >

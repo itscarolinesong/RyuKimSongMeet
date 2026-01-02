@@ -121,7 +121,7 @@ export default function MeetingPage({ params }: { params: Promise<{ id: string }
       availabilities: meeting.availabilities,
       dateRange: { start: startDate, end: endDate },
       duration: meeting.duration,
-      minUsers: 2,
+      minUsers: meeting.users.length, // Require ALL users to be available
       maxOptions: 10
     });
 
