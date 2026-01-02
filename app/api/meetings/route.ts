@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { kv } from '@vercel/kv';
+import redis from '@/lib/redis';
 import { Meeting } from '@/lib/types';
 
 // Generate unique meeting ID
@@ -23,8 +23,8 @@ export async function POST(request: Request) {
       availabilities: []
     };
 
-    // Store in Vercel KV
-    await kv.set(`meeting:${meetingId}`, JSON.stringify(meeting));
+    // Store in Redis
+    await redis.set(`meeting:${meetingId}`, JSON.stringify(meeting));
 
     return NextResponse.json({ meeting, meetingId });
   } catch (error) {
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       error: 'Failed to create meeting',
       details: errorMessage,
-      help: 'Make sure Vercel KV is set up and connected to this project'
+      help: 'Make sure Redis/KV is set up and REDIS_URL is configured'
     }, { status: 500 });
   }
 }
@@ -42,16 +42,14 @@ export async function POST(request: Request) {
 export async function GET() {
   try {
     // Get all meeting keys
-    const keys = await kv.keys('meeting:*');
+    const keys = await redis.keys('meeting:*');
     const meetings: Record<string, Meeting> = {};
 
     // Fetch all meetings
     for (const key of keys) {
-      const meetingData = await kv.get(key);
+      const meetingData = await redis.get(key);
       if (meetingData) {
-        const meeting = typeof meetingData === 'string'
-          ? JSON.parse(meetingData)
-          : meetingData as Meeting;
+        const meeting = JSON.parse(meetingData);
         meetings[meeting.id] = meeting;
       }
     }

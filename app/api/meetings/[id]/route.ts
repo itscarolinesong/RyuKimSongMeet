@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { kv } from '@vercel/kv';
+import redis from '@/lib/redis';
 import { Meeting } from '@/lib/types';
 
 // GET: Get specific meeting
@@ -9,15 +9,13 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const meetingData = await kv.get(`meeting:${id}`);
+    const meetingData = await redis.get(`meeting:${id}`);
 
     if (!meetingData) {
       return NextResponse.json({ error: 'Meeting not found' }, { status: 404 });
     }
 
-    const meeting = typeof meetingData === 'string'
-      ? JSON.parse(meetingData)
-      : meetingData as Meeting;
+    const meeting = JSON.parse(meetingData);
 
     return NextResponse.json({ meeting });
   } catch (error) {
@@ -35,15 +33,13 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
 
-    const meetingData = await kv.get(`meeting:${id}`);
+    const meetingData = await redis.get(`meeting:${id}`);
 
     if (!meetingData) {
       return NextResponse.json({ error: 'Meeting not found' }, { status: 404 });
     }
 
-    const existingMeeting = typeof meetingData === 'string'
-      ? JSON.parse(meetingData)
-      : meetingData as Meeting;
+    const existingMeeting = JSON.parse(meetingData);
 
     // Update meeting
     const updatedMeeting = {
@@ -52,7 +48,7 @@ export async function PUT(
       id // Ensure ID doesn't change
     };
 
-    await kv.set(`meeting:${id}`, JSON.stringify(updatedMeeting));
+    await redis.set(`meeting:${id}`, JSON.stringify(updatedMeeting));
 
     return NextResponse.json({ meeting: updatedMeeting });
   } catch (error) {
@@ -68,13 +64,13 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const meetingData = await kv.get(`meeting:${id}`);
+    const meetingData = await redis.get(`meeting:${id}`);
 
     if (!meetingData) {
       return NextResponse.json({ error: 'Meeting not found' }, { status: 404 });
     }
 
-    await kv.del(`meeting:${id}`);
+    await redis.del(`meeting:${id}`);
 
     return NextResponse.json({ success: true });
   } catch (error) {
