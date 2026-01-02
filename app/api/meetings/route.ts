@@ -29,7 +29,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ meeting, meetingId });
   } catch (error) {
     console.error('Error creating meeting:', error);
-    return NextResponse.json({ error: 'Failed to create meeting' }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({
+      error: 'Failed to create meeting',
+      details: errorMessage,
+      help: 'Make sure Vercel KV is set up and connected to this project'
+    }, { status: 500 });
   }
 }
 
