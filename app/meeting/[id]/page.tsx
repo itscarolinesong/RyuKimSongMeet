@@ -174,7 +174,7 @@ export default function MeetingPage({ params }: { params: Promise<{ id: string }
             onClick={copyShareLink}
             className="mt-3 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-colors text-sm"
           >
-            📋 링크 복사하여 친구 초대
+            📋 링크 복사!
           </button>
         </div>
       </header>
@@ -183,7 +183,7 @@ export default function MeetingPage({ params }: { params: Promise<{ id: string }
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         {/* User Selection */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">나는 누구인가요?</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">당신은 누구인가...</h2>
 
           {!currentUser ? (
             <div className="space-y-4">
@@ -279,7 +279,7 @@ export default function MeetingPage({ params }: { params: Promise<{ id: string }
                 onClick={() => setCurrentUser(null)}
                 className="text-blue-600 hover:text-blue-700 text-sm font-medium"
               >
-                다른 사람으로 변경
+                다른 멤버로 변경
               </button>
             </div>
           )}
@@ -317,7 +317,7 @@ export default function MeetingPage({ params }: { params: Promise<{ id: string }
               onClick={handleFindTimes}
               className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
             >
-              최적 시간 찾기
+              만날 수 있는 시간 찾기
             </button>
           </div>
         )}
@@ -339,7 +339,7 @@ export default function MeetingPage({ params }: { params: Promise<{ id: string }
         {selectedOption && (
           <div className="bg-white rounded-lg shadow-md p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              선택한 시간 캘린더에 추가
+              캘린더에 추가!
             </h3>
             <CalendarExport
               meetingOption={selectedOption}
