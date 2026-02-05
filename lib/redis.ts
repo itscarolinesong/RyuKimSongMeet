@@ -13,11 +13,11 @@ function getRedis(): Redis {
   if (redis) return redis;
 
   // Create Redis client
-  // Checks UPSTASH_REDIS_URL first (manual), then falls back to Vercel-managed vars
-  const redisUrl = process.env.UPSTASH_REDIS_URL || process.env.REDIS_URL || process.env.KV_REST_API_URL;
+  // Works with both REDIS_URL and KV_REST_API_URL
+  const redisUrl = process.env.REDIS_URL || process.env.KV_REST_API_URL;
 
   if (!redisUrl) {
-    throw new Error('Redis URL not found. Please set UPSTASH_REDIS_URL environment variable.');
+    throw new Error('Redis URL not found. Please set REDIS_URL or connect Redis database in Vercel.');
   }
 
   redis = new Redis(redisUrl, {
