@@ -22,6 +22,7 @@ function getRedis(): Redis {
 
   redis = new Redis(redisUrl, {
     maxRetriesPerRequest: 3,
+    tls: redisUrl.includes('upstash') ? {} : undefined,
     retryStrategy(times) {
       const delay = Math.min(times * 50, 2000);
       return delay;
